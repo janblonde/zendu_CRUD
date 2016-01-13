@@ -108,6 +108,7 @@ function LocationsCtrl($scope, locationsApi) {
     selectedId = -1;
     addFlag = true;
     $scope.model.locationBox = '';
+    $scope.model.lastName = '';
   }
 
   function startEdit(id) {
