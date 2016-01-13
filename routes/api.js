@@ -43,7 +43,7 @@ router.put('/location', function(req,res){
     },{
         $set: {
         displayName: req.body.displayName,
-        displayLastName: "",
+        displayLastName: req.body.lastName,
         date: new Date(Date.now())
         }
     }).exec();

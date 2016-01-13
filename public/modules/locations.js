@@ -145,8 +145,8 @@ function LocationsCtrl($scope, locationsApi) {
     return addFlag;
   }
 
-  function isInEditMode(id) {
-    return selectedId == id && editFlag;
+  function isInEditMode() {
+    return editFlag;
   }
 
   function isInRemoveMode(id) {
@@ -169,7 +169,8 @@ function LocationsCtrl($scope, locationsApi) {
       return locationsApi.updateLocation(
         {
           id: selectedId,
-          displayName: $scope.model.locationBox
+          displayName: $scope.model.locationBox,
+          lastName: $scope.model.lastName
         })
     })
   }

@@ -1,6 +1,8 @@
-angular.module('main', ['ngRoute', 'core', 'maintenance'])
+angular.module('main', ['ngRoute', 'core', 'maintenance', 'ngCookies'])
+  .factory('authService', AuthService)
   .controller('adminCtrl', AdminCtrl)
   .controller('mainCtrl', MainCtrl)
+  .controller('loginCtrl', LoginCtrl)
   .config(function ($routeProvider) {
     $routeProvider.when('/locations', {
       templateUrl: 'views/locations.html'
@@ -12,6 +14,10 @@ angular.module('main', ['ngRoute', 'core', 'maintenance'])
     $routeProvider.when('/types', {
       templateUrl: 'views/types.html',
       controller: 'typesCtrl'
+    });
+    $routeProvider.when('/login', {
+      templateUrl: 'views/login.html',
+      controller: 'loginCtrl'
     });
     $routeProvider.otherwise({
       templateUrl: 'views/main.html',
@@ -39,3 +45,35 @@ function AdminCtrl($scope, currentSpot) {
 
 function MainCtrl(currentSpot) {
 }
+
+function AuthService($http){
+  return {
+    login: function(credentials){
+        return $http.post('/api/login', credentials);
+    },
+    logout: function(){
+        return $http.get('/api/logout');
+    }
+  }
+}
+
+function LoginCtrl($scope, authService, $cookies, $location, $log){
+  $scope.credentials={
+    username: '',
+    password: ''
+  };
+  $scope.login = function(credentials){
+    console.log("LOGIN");
+    authService.login(credentials).then(
+      function(res){
+        $cookies.loggedInUser = res.data;
+        $location.path('/locations');
+      },
+      function(err){
+        //flashMessageService.setMessage(err.data);
+        console.log('ERROR');
+        $log.log(err);
+      })
+  }
+}
+
