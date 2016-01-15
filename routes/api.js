@@ -55,7 +55,8 @@ router.delete('/location/:id', function(req,res){
     Location.remove({
         _id: req.params.id
     }, function(err){
-        console.log(err);
+        if(err)
+            console.log("ERROR:" + err);
     });
     res.send("Location id:" + req.params.id + " has been deleted");
 });

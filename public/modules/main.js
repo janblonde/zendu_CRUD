@@ -1,5 +1,6 @@
 angular.module('main', ['ngRoute', 'core', 'maintenance', 'ngCookies'])
   .factory('authService', AuthService)
+  .factory('myHttpInterceptor', MyHttpInterceptor)
   .controller('adminCtrl', AdminCtrl)
   .controller('mainCtrl', MainCtrl)
   .controller('loginCtrl', LoginCtrl)
@@ -23,6 +24,9 @@ angular.module('main', ['ngRoute', 'core', 'maintenance', 'ngCookies'])
       templateUrl: 'views/main.html',
       controller: 'mainCtrl'
     });
+  })
+  .config(function ($httpProvider){
+    $httpProvider.interceptors.push('myHttpInterceptor');
   });
 
 function AdminCtrl($scope, currentSpot) {
@@ -54,7 +58,22 @@ function AuthService($http){
     logout: function(){
         return $http.get('/api/logout');
     }
-  }
+  };
+}
+
+function MyHttpInterceptor($q, $location){
+  return{
+    response: function(response){
+      return response;
+    },
+    responseError: function(response){
+      if(response.status === 401){
+        $location.path('login');
+        return $q.reject(response);
+      }
+      return $q.reject(response);
+    }
+  };
 }
 
 function LoginCtrl($scope, authService, $cookies, $location, $log){
@@ -73,7 +92,7 @@ function LoginCtrl($scope, authService, $cookies, $location, $log){
         //flashMessageService.setMessage(err.data);
         console.log('ERROR');
         $log.log(err);
-      })
-  }
+      });
+  };
 }
 
