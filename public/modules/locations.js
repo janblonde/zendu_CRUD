@@ -1,7 +1,7 @@
 angular.module('maintenance')
   .factory('locationsApi', locationsApi)
   .controller('locationsCtrl', LocationsCtrl)
-  .constant('apiUrl','http://54.93.115.231:3000/api/location/')
+  .constant('apiUrl','http://54.93.65.196:3000/api/location/')
   .constant('userId','c5c2bc33-0385-4256-9a3d-d19177c0be9d')
   .constant('userSecret','8924cca6a9b84e83b0f898eb42b68de6c43a43b8648d4232949b96e80bc81a83fbc89c0a470b40e2806d13c89bc8d98d')
 
@@ -32,6 +32,7 @@ function locationsApi($http,apiUrl,userId,userSecret) {
       },
       data: data
     }
+    console.log(req);
     return $http(req);
   } 
 
@@ -209,6 +210,8 @@ function LocationsCtrl($scope, locationsApi) {
         $scope.errorMessage = '';
       })
       .error(function(errorInfo, status){
+        console.log(errorInfo);
+        console.log(status);
         setError(errorInfo, status, -2);
       });
     reset();
