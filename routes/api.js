@@ -10,8 +10,7 @@ router.get('/',function(req,res){
     res.send('Welcome to the API zone');
 });
 
-router.get('/location', sessionCheck, function(req,res){
-    console.log('GET');
+router.get('/location', function(req,res){
     Location.find(function(err, locations){
         if(!err){
             res.send(locations);
@@ -21,7 +20,7 @@ router.get('/location', sessionCheck, function(req,res){
     })
 });
 
-router.post('/location', sessionCheck, function(req,res){
+router.post('/location', function(req,res){
     var location = new Location({
         displayName: req.body.displayName,
         displayLastName: req.body.lastName,
@@ -37,7 +36,7 @@ router.post('/location', sessionCheck, function(req,res){
     });
 });
 
-router.put('/location', sessionCheck, function(req,res){
+router.put('/location', function(req,res){
 
     Location.update({
         _id:req.body.id
@@ -51,14 +50,90 @@ router.put('/location', sessionCheck, function(req,res){
     res.send("Location updated");
 });
 
-router.delete('/location/:id', sessionCheck, function(req,res){
+router.delete('/location/:id', function(req,res){
     
+    console.log("ID:" + req.params.id);
     Location.remove({
+        _id: req.params.id
+    }, function(err){
+        console.log("ERROR:" + err);
+    });
+    res.send("Location id:" + req.params.id + " has been deleted");
+});
+
+router.get('/pages',function(req,res){
+    Page.find(function(err,pages){
+        if(!err){
+            res.send(pages);
+        }else{
+            res.send(500, err);
+        }
+    })
+});
+
+router.post('/pages/add', sessionCheck, function(req,res){
+    var page = new Page({
+        title: req.body.title,
+        url: req.body.url,
+        content: req.body.content,
+        menuIndex: req.body.menuIndex,
+        date: new Date(Date.now())
+    });
+    
+    page.save(function(err){
+        if(!err){
+            return res.send(200,page);
+        }else{
+            return res.send(500,err);
+        }
+    });
+});
+
+router.post('/pages/update', sessionCheck, function(req,res){
+    
+    Page.update({
+        _id:req.body._id
+    },{
+        $set: {
+        title: req.body.title,
+        url: req.body.url,
+        content: req.body.content,
+        menuIndex: req.body.menuIndex,
+        date: new Date(Date.now())
+        }
+    }).exec();
+    res.send("Page updated");
+});
+
+router.get('/pages/delete/:id', sessionCheck, function(req,res){
+
+    Page.remove({
         _id: req.params.id
     }, function(err){
         console.log(err);
     });
-    res.send("Location id:" + req.params.id + " has been deleted");
+    res.send("Page id:" + req.params.id + " has been deleted");
+});
+
+router.get('/pages/admin-details/:id', sessionCheck, function(req,res){
+    
+    Page.findOne({
+        _id: req.params.id
+    },function(err,page){
+        if (err)
+            console.log(err);
+        res.send(page);
+    })
+});
+
+router.get('/pages/details/:url', function(req,res){
+    Page.findOne({
+        url: req.params.url
+    },function(err,page){
+        if (err)
+            console.log(err);
+        res.send(page);
+    })
 });
 
 //admin routes
