@@ -1,4 +1,4 @@
-angular.module('main', ['ngRoute', 'core', 'maintenance', 'ngCookies'])
+angular.module('main', ['ngRoute', 'core', 'locations', 'maintenance', 'ngCookies'])
   .factory('authService', AuthService)
   .factory('myHttpInterceptor', MyHttpInterceptor)
   .controller('adminCtrl', AdminCtrl)

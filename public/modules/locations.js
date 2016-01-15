@@ -1,72 +1,7 @@
-angular.module('maintenance')
-  .factory('locationsApi', locationsApi)
+angular.module('locations',['services'])
   .controller('locationsCtrl', LocationsCtrl)
-  .constant('apiUrl','http://54.93.65.196:3000/api/location/')
-  .constant('userId','c5c2bc33-0385-4256-9a3d-d19177c0be9d')
-  .constant('userSecret','8924cca6a9b84e83b0f898eb42b68de6c43a43b8648d4232949b96e80bc81a83fbc89c0a470b40e2806d13c89bc8d98d')
 
-function locationsApi($http,apiUrl,userId,userSecret) {
-
-  function get(param){
-    return request("GET",param);
-  }
-
-  function post(data){
-    return request("POST", null, data);
-  }
-
-  function put(data){
-    return request("PUT", null, data);
-  }
-
-  function del(data){
-    return request("DELETE",data);
-  }
-
-  function request(verb, param, data){
-    var req = {
-      method: verb,
-      url: url(param),
-      headers: {
-        'Authorization': getAuthHeader()
-      },
-      data: data
-    }
-    console.log(req);
-    return $http(req);
-  } 
-
-  function url(param) {
-    if (param==null || !angular.isDefined(param)){
-      param = '';
-    }
-    return apiUrl + param;
-  }
-
-  function getAuthHeader(){
-    return "TenantSecret " + userId + "," + userSecret;
-  }
-
-  return {
-    getLocations: function () {
-      return get();
-    },
-    getLocationById: function (id) {
-      return get(id);
-    },
-    addLocation: function (location) {
-      return post(location);
-    },
-    removeLocation: function (id) {
-      return del(id);
-    },
-    updateLocation: function (location) {
-      return put(location);
-    }
-  }
-}
-
-function LocationsCtrl($scope, locationsApi) {
+function LocationsCtrl($scope, apiService) {
   var selectedId = -1;
   var addFlag = false;
   var editFlag = false;
@@ -156,18 +91,18 @@ function LocationsCtrl($scope, locationsApi) {
 
   function add() {
     useBackend(-1, function () {
-      return locationsApi.addLocation(
+      return apiService.apiPOST('location',
         {
           id: 0,
           displayName: $scope.model.locationBox,
           lastName: $scope.model.lastName
-        })
-    })
+        });
+    });
   }
 
   function save() {
     useBackend(selectedId, function () {
-      return locationsApi.updateLocation(
+      return apiService.apiPUT('location',
         {
           id: selectedId,
           displayName: $scope.model.locationBox,
@@ -178,7 +113,7 @@ function LocationsCtrl($scope, locationsApi) {
 
   function remove(id) {
     useBackend(id, function () {
-      return locationsApi.removeLocation(id);
+      return apiService.apiDEL('location', id);
     })
   }
 
@@ -203,7 +138,7 @@ function LocationsCtrl($scope, locationsApi) {
 
   function refresh() {
     busy(-2);
-    locationsApi.getLocations()
+    apiService.apiGET('location')
       .success(function (data) {
         $scope.locations = data;
         complete(-2);
