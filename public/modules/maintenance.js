@@ -1,9 +1,16 @@
-﻿angular.module('maintenance', [])
-  .controller('sitesCtrl', SitesCtrl)
-  .controller('typesCtrl', TypesCtrl);
+angular.module('maintenance', [])
+  .controller('brievenCtrl', BrievenCtrl)
+  .controller('facturenCtrl', FacturenCtrl)
+  .controller('creditsCtrl', CreditsCtrl);
 
-function SitesCtrl(currentSpot) {
+function BrievenCtrl() {
 }
 
-function TypesCtrl() {
+function FacturenCtrl() {
 }
+
+function CreditsCtrl() {
+}
+
+
+

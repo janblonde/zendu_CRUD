@@ -8,13 +8,17 @@ angular.module('main', ['ngRoute', 'core', 'maintenance', 'locations', 'ngCookie
     $routeProvider.when('/locations', {
       templateUrl: 'views/locations.html'
     });
-    $routeProvider.when('/sites', {
-      templateUrl: 'views/sites.html',
-      controller: 'sitesCtrl'
+    $routeProvider.when('/brieven', {
+      templateUrl: 'views/brieven.html',
+      controller: 'brievenCtrl'
     });
-    $routeProvider.when('/types', {
-      templateUrl: 'views/types.html',
-      controller: 'typesCtrl'
+    $routeProvider.when('/facturen', {
+      templateUrl: 'views/facturen.html',
+      controller: 'facturenCtrl'
+    });
+    $routeProvider.when('/credits', {
+      templateUrl: 'views/credits.html',
+      controller: 'creditsCtrl'
     });
     $routeProvider.when('/login', {
       templateUrl: 'views/login.html',
