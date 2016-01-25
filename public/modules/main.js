@@ -1,4 +1,4 @@
-angular.module('main', ['ngRoute', 'core', 'maintenance', 'locations', 'ngCookies'])
+angular.module('main', ['ngRoute', 'core', 'maintenance', 'locations', 'brieven','ngCookies'])
   .factory('authService', AuthService)
   .factory('myHttpInterceptor', MyHttpInterceptor)
   .controller('adminCtrl', AdminCtrl)
@@ -6,7 +6,8 @@ angular.module('main', ['ngRoute', 'core', 'maintenance', 'locations', 'ngCookie
   .controller('loginCtrl', LoginCtrl)
   .config(function ($routeProvider) {
     $routeProvider.when('/locations', {
-      templateUrl: 'views/locations.html'
+      templateUrl: 'views/locations.html',
+      controller: 'locationsCtrl'
     });
     $routeProvider.when('/brieven', {
       templateUrl: 'views/brieven.html',

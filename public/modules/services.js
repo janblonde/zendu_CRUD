@@ -1,6 +1,6 @@
 angular.module('services',[])
   .factory('serviceApi', serviceApi)
-  .constant('apiUrl','http://54.93.65.196:3000/api/')
+  .constant('apiUrl','http://52.59.245.81:3000/api/')
 
 function serviceApi($http,apiUrl) {
 

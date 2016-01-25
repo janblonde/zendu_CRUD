@@ -1,4 +1,149 @@
 <div yw-active-menu="Brieven"
      yw-active-title="Beheer de lijst van brieven">
-  <p>Brieven content</p>
+  <div class="row" ng-show="isLoading()">
+    <div class="col-sm-12">
+      <img src="images/progressring.gif" />
+      Loading...
+    </div>
+  </div>
+  <div ng-show="!isLoading()">
+    <div class="row"
+         ng-show="!isInAddMode()"
+         style="margin-bottom: 12px;">
+      <div class="col-sm-12">
+        <button class="btn btn-primary"
+                ng-disabled="isBusy()"
+                ng-click="startAdd()">
+          Nieuwe brief verzenden
+        </button>
+      </div>
+    </div>
+    
+    <!-- ADD Pane -->
+    <div class="row"
+         ng-show="isInAddMode()"
+         style="margin-bottom: 12px;">
+      <div class="col-sm-4">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination firstname"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationfirstname" />
+      </div>
+      <div class="col-sm-4">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination lastname"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationlastname" />
+      </div>
+      <div class="col-sm-4 button-space">
+        <div class="pull-right">
+          <img ng-show="isBusy(-1)" src="images/progressring.gif" />
+          <button class="btn btn-success btn-sm"
+                  ng-disabled="isBusy()"
+                  ng-click="add()">
+            Add
+          </button>
+          <button class="btn btn-danger btn-sm"
+                  ng-disabled="isBusy()"
+                  ng-click="cancel()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- EDIT Pane -->
+    <div class="row"
+         ng-show="isInEditMode()"
+         style="margin-bottom: 12px;">
+      <div class="col-sm-4">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination firstname"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationfirstname" />
+      </div>
+      <div class="col-sm-4">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination lastname"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationlastname" />
+      </div>
+      <div class="col-sm-4 button-space">
+        <div class="pull-right">
+          <img ng-show="isBusy(-1)" src="images/progressring.gif" />
+          <button class="btn btn-success btn-sm"
+                  ng-disabled="isBusy()"
+                  ng-click="save()">
+            Save
+          </button>
+          <button class="btn btn-danger btn-sm"
+                  ng-disabled="isBusy()"
+                  ng-click="cancel()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ROWS -->
+    <div class="row" ng-repeat="brief in brieven | orderBy: 'createdAt'"
+         ng-class="{oddRow: $index % 2 == 0}"
+         ng-show="!isInAddMode() && !isInEditMode()">
+      <div ng-show="isInReadMode(brief._id)">
+        <div class="col-sm-4">
+          <h4 class="list-name">
+            {{brief.destinationFirstName}}
+          </h4>
+        </div>
+        <div class="col-sm-4">
+          <h4 class="list-name">
+            {{brief.destinationLastName}}
+          </h4>
+        </div>
+        <div class="col-sm-4 button-space">
+          <div class="pull-right">
+            <img ng-show="isBusy(brief._id)" src="images/progressring.gif" />
+            <button class="btn btn-warning btn-sm"
+                    ng-disabled="isBusy()"
+                    ng-click="startEdit(brief._id)">
+              Edit
+            </button>
+            <button class="btn btn-danger btn-sm"
+                    ng-disabled="isBusy()"
+                    ng-click="startRemove(brief._id)">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+      <div ng-show="isInRemoveMode(brief._id)">
+        <div class="col-sm-4">
+          <h4 class="text-danger list-name">
+            {{brief.destinationLastName}}
+          </h4>
+        </div>
+        <div class="col-sm-4">
+          <h4 class="text-danger list-name">
+            {{brief.destinationFirstName}}
+          </h4>
+        </div>
+        <div class="col-sm-4 button-space">
+          <div class="pull-right">
+            <img ng-show="isBusy(brief._id)" src="images/progressring.gif" />
+            <button class="btn btn-success btn-sm"
+                    ng-disabled="isBusy(brief._id)"
+                    ng-click="remove(brief._id)">
+              Confirm
+            </button>
+            <button class="btn btn-danger btn-sm"
+                    ng-disabled="isBusy(brief._id)"
+                    ng-click="cancel()">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
