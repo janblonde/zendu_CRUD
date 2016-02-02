@@ -1,33 +1,43 @@
-angular.module('main', ['ngRoute', 'core', 'locations', 'maintenance', 'ngCookies'])
+angular.module('main', ['ngRoute', 'core', 'maintenance', 'locations', 'brieven','ngCookies'])
   .factory('authService', AuthService)
   .factory('myHttpInterceptor', MyHttpInterceptor)
   .controller('adminCtrl', AdminCtrl)
   .controller('mainCtrl', MainCtrl)
   .controller('loginCtrl', LoginCtrl)
+  .controller('registerCtrl', RegisterCtrl)
   .config(function ($routeProvider) {
     $routeProvider.when('/locations', {
-      templateUrl: 'views/locations.html'
+      templateUrl: 'views/locations.html',
+      controller: 'locationsCtrl'
     });
-    $routeProvider.when('/sites', {
-      templateUrl: 'views/sites.html',
-      controller: 'sitesCtrl'
+    $routeProvider.when('/brieven', {
+      templateUrl: 'views/brieven.html',
+      controller: 'brievenCtrl'
     });
-    $routeProvider.when('/types', {
-      templateUrl: 'views/types.html',
-      controller: 'typesCtrl'
+    $routeProvider.when('/facturen', {
+      templateUrl: 'views/facturen.html',
+      controller: 'facturenCtrl'
+    });
+    $routeProvider.when('/credits', {
+      templateUrl: 'views/credits.html',
+      controller: 'creditsCtrl'
     });
     $routeProvider.when('/login', {
       templateUrl: 'views/login.html',
       controller: 'loginCtrl'
     });
+    $routeProvider.when('/register', {
+      templateUrl: 'views/register.html',
+      controller: 'registerCtrl'
+    });
     $routeProvider.otherwise({
-      templateUrl: 'views/main.html',
-      controller: 'mainCtrl'
+      templateUrl: 'views/login.html',
+      controller: 'loginCtrl'
     });
   })
   .config(function ($httpProvider){
     $httpProvider.interceptors.push('myHttpInterceptor');
-  })
+  });
 
 function AdminCtrl($scope, currentSpot) {
   $scope.isActive = isActive;
@@ -58,7 +68,7 @@ function AuthService($http){
     logout: function(){
         return $http.get('/api/logout');
     }
-  }
+  };
 }
 
 function MyHttpInterceptor($q, $location){
@@ -73,16 +83,15 @@ function MyHttpInterceptor($q, $location){
       }
       return $q.reject(response);
     }
-  }
+  };
 }
 
 function LoginCtrl($scope, authService, $cookies, $location, $log){
   $scope.credentials={
-    username: '',
+    email: '',
     password: ''
   };
   $scope.login = function(credentials){
-    console.log("LOGIN");
     authService.login(credentials).then(
       function(res){
         $cookies.loggedInUser = res.data;
@@ -90,9 +99,39 @@ function LoginCtrl($scope, authService, $cookies, $location, $log){
       },
       function(err){
         //flashMessageService.setMessage(err.data);
-        console.log('ERROR');
         $log.log(err);
-      })
-  }
+      });
+  };
 }
 
+function RegisterCtrl($scope, authService, $cookies, $location, $log, serviceApi){
+  $scope.register = function(data){
+    serviceApi.post("add-user",
+    {
+      company: data.company,
+      vat_number: data.vat_number,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      email: data.email,
+      password: data.password,
+      streetname: data.streetname,
+      streetnumber: data.streetnumber,
+      zipcode: data.zipcode,
+      city: data.city
+    }).then(
+    function(res){
+      authService.login(data).then(
+      function(res){
+        $cookies.loggedInUser = res.data;
+        $location.path('/locations');
+      },
+      function(err){
+        $log.log(err);
+      });
+    },
+    function(err){
+      console.log('error!');
+    }
+    );
+  };
+}

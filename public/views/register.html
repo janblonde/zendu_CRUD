@@ -1,0 +1,47 @@
+<div yw-active-menu="Register"
+     yw-active-title="Register as a user"
+>
+
+<form role="form" id="register" ng-submit="register(data)">
+    <div class="form-group">
+        <label>E-mail</label>
+        <input class="form-control" type="text" ng-model="data.email"/>
+    </div>    
+    <div class="form-group">
+        <label>Paswoord</label>
+        <input class="form-control" type="password" ng-model="data.password"/>
+    </div>
+    <div class="form-group">
+        <label>Voornaam</label>
+        <input class="form-control" type="text" ng-model="data.first_name"/>
+    </div>
+    <div class="form-group">
+        <label>Familienaam</label>
+        <input class="form-control" type="text" ng-model="data.last_name"/>
+    </div>
+    <div class="form-group">
+        <label>Bedrijf</label>
+        <input class="form-control" type="text" ng-model="data.company"/>
+    </div>
+    <div class="form-group">
+        <label>BTW-nummer</label>
+        <input class="form-control" type="text" ng-model="data.vat_number"/>
+    </div>
+    <div class="form-group">
+        <label>Straatnaam</label>
+        <input class="form-control" type="text" ng-model="data.streetname"/>
+    </div>
+    <div class="form-group">
+        <label>Straatnummer</label>
+        <input class="form-control" type="text" ng-model="data.streetnumber"/>
+    </div>
+    <div class="form-group">
+        <label>Postcode</label>
+        <input class="form-control" type="text" ng-model="data.zipcode"/>
+    </div>
+    <div class="form-group">
+        <label>Gemeente</label>
+        <input class="form-control" type="text" ng-model="data.city"/>
+    </div>
+    <input type="submit" class="btn btn-success" value="Register">
+</form>

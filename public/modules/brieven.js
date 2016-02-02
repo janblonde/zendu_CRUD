@@ -1,7 +1,7 @@
-angular.module('locations',['services'])
-  .controller('locationsCtrl', LocationsCtrl)
+angular.module('brieven',['services'])
+  .controller('brievenCtrl', BrievenCtrl)
 
-function LocationsCtrl($scope, serviceApi) {
+function BrievenCtrl($scope, serviceApi) {
   var selectedId = -1;
   var addFlag = false;
   var editFlag = false;
@@ -43,19 +43,24 @@ function LocationsCtrl($scope, serviceApi) {
     reset();
     selectedId = -1;
     addFlag = true;
-    $scope.model.locationBox = '';
-    $scope.model.lastName = '';
+    $scope.model.destinationemail = '';
+    $scope.model.destinationfirstname = '';
+    $scope.model.destinationlastname = '';
+    $scope.model.destinationstreetname = '';
+    $scope.model.destinationstreetnumber = '';
+    $scope.model.destinationcity = '';
+    $scope.model.destinationzipcode = '';
   }
 
   function startEdit(id) {
     reset();
     selectedId = id;
     editFlag = true;
-    for (var i=0;i<$scope.locations.length;i++){
-      var item = $scope.locations[i];
+    for (var i=0;i<$scope.brieven.length;i++){
+      var item = $scope.brieven[i];
       if (item._id == id){
-        $scope.model.locationBox = item.displayName;
-        $scope.model.lastName = item.displayLastName;
+        $scope.model.destinationfirstname = item.destinationFirstName;
+        $scope.model.destinationlastname = item.destinationLastName;
       }
     }
   }
@@ -92,29 +97,37 @@ function LocationsCtrl($scope, serviceApi) {
 
   function add() {
     useBackend(-1, function () {
-      return serviceApi.post("location",
+      return serviceApi.post("brief",
         {
           id: 0,
-          displayName: $scope.model.locationBox,
-          lastName: $scope.model.lastName
+          destinationfirstname: $scope.model.destinationfirstname,
+          destinationlastname: $scope.model.destinationlastname,
+          destinationstreetname: $scope.model.destinationstreetname,
+          destinationstreetnumber: $scope.model.destinationstreetnumber,
+          destinationcity: $scope.model.destinationcity,
+          destinationzipcode: $scope.model.destinationzipcode
         });
     });
   }
 
   function save() {
     useBackend(selectedId, function () {
-      return serviceApi.put("location",
+      return serviceApi.put("brief",
         {
           id: selectedId,
-          displayName: $scope.model.locationBox,
-          lastName: $scope.model.lastName
-        })
-    })
+          destinationfirstname: $scope.model.destinationfirstname,
+          destinationlastname: $scope.model.destinationlastname,
+          destinationstreetname: $scope.model.destinationstreetname,
+          destinationstreetnumber: $scope.model.destinationstreetnumber,
+          destinationcity: $scope.model.destinationcity,
+          destinationzipcode: $scope.model.destinationzipcode
+        });
+    });
   }
 
   function remove(id) {
     useBackend(id, function () {
-      return serviceApi.delete("location", id);
+      return serviceApi.delete("brief", id);
     })
   }
 
@@ -139,15 +152,13 @@ function LocationsCtrl($scope, serviceApi) {
 
   function refresh() {
     busy(-2);
-    serviceApi.get("location")
+    serviceApi.get("brief")
       .success(function (data) {
-        $scope.locations = data;
+        $scope.brieven = data;
         complete(-2);
         $scope.errorMessage = '';
       })
       .error(function(errorInfo, status){
-        console.log(errorInfo);
-
         setError(errorInfo, status, -2);
       });
     reset();

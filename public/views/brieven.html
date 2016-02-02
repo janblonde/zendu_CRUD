@@ -1,5 +1,5 @@
-<div yw-active-menu="Locations"
-     yw-active-title="Manage the list of diving locations">
+<div yw-active-menu="Brieven"
+     yw-active-title="Beheer de lijst van brieven">
   <div class="row" ng-show="isLoading()">
     <div class="col-sm-12">
       <img src="images/progressring.gif" />
@@ -14,7 +14,7 @@
         <button class="btn btn-primary"
                 ng-disabled="isBusy()"
                 ng-click="startAdd()">
-          Add new dive
+          Nieuwe brief verzenden
         </button>
       </div>
     </div>
@@ -23,20 +23,50 @@
     <div class="row"
          ng-show="isInAddMode()"
          style="margin-bottom: 12px;">
-      <div class="col-sm-4">
-        <input class="form-control input-lg" type="text"
-               placeholder="location name"
+      <div class="col-sm-12 text-space">
+        <input autofocus class="form-control input-lg" type="email"
+               placeholder="destination email"
                ng-disabled="isBusy(-1)"
-               ng-model="model.locationBox" />
+               ng-model="model.destinationemail" />
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-6 text-space">
         <input class="form-control input-lg" type="text"
-               placeholder="location lastname"
+               placeholder="destination firstname"
                ng-disabled="isBusy(-1)"
-               ng-model="model.lastName" />
+               ng-model="model.destinationfirstname" />
       </div>
-      <div class="col-sm-4 button-space">
-        <div class="pull-right">
+      <div class="col-sm-6 text-space">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination lastname"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationlastname" />
+      </div>
+      <div class="col-sm-9 text-space">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination streetname"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationstreetname" />
+      </div>
+      <div class="col-sm-3 text-space">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination streetnumber"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationstreetnumber" />
+      </div>
+      <div class="col-sm-9 text-space">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination city"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationcity" />
+      </div>
+      <div class="col-sm-3 text-space">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination zipcode"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationzipcode" />
+      </div>
+      <div class="col-sm-2 button-space">
+        <div class="pull-left">
           <img ng-show="isBusy(-1)" src="images/progressring.gif" />
           <button class="btn btn-success btn-sm"
                   ng-disabled="isBusy()"
@@ -50,6 +80,7 @@
           </button>
         </div>
       </div>
+      <div class="col-sm-10 text-space"/>
     </div>
     
     <!-- EDIT Pane -->
@@ -58,15 +89,15 @@
          style="margin-bottom: 12px;">
       <div class="col-sm-4">
         <input class="form-control input-lg" type="text"
-               placeholder="location name"
+               placeholder="destination firstname"
                ng-disabled="isBusy(-1)"
-               ng-model="model.locationBox" />
+               ng-model="model.destinationfirstname" />
       </div>
       <div class="col-sm-4">
         <input class="form-control input-lg" type="text"
-               placeholder="location lastname"
+               placeholder="destination lastname"
                ng-disabled="isBusy(-1)"
-               ng-model="model.lastName" />
+               ng-model="model.destinationlastname" />
       </div>
       <div class="col-sm-4 button-space">
         <div class="pull-right">
@@ -86,52 +117,57 @@
     </div>
     
     <!-- ROWS -->
-    <div class="row" ng-repeat="location in locations | orderBy: 'displayName'"
+    <div class="row" ng-repeat="brief in brieven | orderBy: 'createdAt'"
          ng-class="{oddRow: $index % 2 == 0}"
          ng-show="!isInAddMode() && !isInEditMode()">
-      <div ng-show="isInReadMode(location._id)">
+      <div ng-show="isInReadMode(brief._id)">
         <div class="col-sm-4">
           <h4 class="list-name">
-            {{location.displayName}}
+            {{brief.destinationFirstName}}
           </h4>
         </div>
         <div class="col-sm-4">
           <h4 class="list-name">
-            {{location.displayLastName}}
+            {{brief.destinationLastName}}
           </h4>
         </div>
         <div class="col-sm-4 button-space">
           <div class="pull-right">
-            <img ng-show="isBusy(location._id)" src="images/progressring.gif" />
+            <img ng-show="isBusy(brief._id)" src="images/progressring.gif" />
             <button class="btn btn-warning btn-sm"
                     ng-disabled="isBusy()"
-                    ng-click="startEdit(location._id)">
+                    ng-click="startEdit(brief._id)">
               Edit
             </button>
             <button class="btn btn-danger btn-sm"
                     ng-disabled="isBusy()"
-                    ng-click="startRemove(location._id)">
+                    ng-click="startRemove(brief._id)">
               Delete
             </button>
           </div>
         </div>
       </div>
-      <div ng-show="isInRemoveMode(location._id)">
-        <div class="col-sm-8">
+      <div ng-show="isInRemoveMode(brief._id)">
+        <div class="col-sm-4">
           <h4 class="text-danger list-name">
-            {{location.displayName}}
+            {{brief.destinationLastName}}
+          </h4>
+        </div>
+        <div class="col-sm-4">
+          <h4 class="text-danger list-name">
+            {{brief.destinationFirstName}}
           </h4>
         </div>
         <div class="col-sm-4 button-space">
           <div class="pull-right">
-            <img ng-show="isBusy(location._id)" src="images/progressring.gif" />
+            <img ng-show="isBusy(brief._id)" src="images/progressring.gif" />
             <button class="btn btn-success btn-sm"
-                    ng-disabled="isBusy(location._id)"
-                    ng-click="remove(location._id)">
+                    ng-disabled="isBusy(brief._id)"
+                    ng-click="remove(brief._id)">
               Confirm
             </button>
             <button class="btn btn-danger btn-sm"
-                    ng-disabled="isBusy(location._id)"
+                    ng-disabled="isBusy(brief._id)"
                     ng-click="cancel()">
               Cancel
             </button>
@@ -141,3 +177,4 @@
     </div>
   </div>
 </div>
+
