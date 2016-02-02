@@ -43,8 +43,13 @@ function BrievenCtrl($scope, serviceApi) {
     reset();
     selectedId = -1;
     addFlag = true;
+    $scope.model.destinationemail = '';
     $scope.model.destinationfirstname = '';
     $scope.model.destinationlastname = '';
+    $scope.model.destinationstreetname = '';
+    $scope.model.destinationstreetnumber = '';
+    $scope.model.destinationcity = '';
+    $scope.model.destinationzipcode = '';
   }
 
   function startEdit(id) {
@@ -96,21 +101,28 @@ function BrievenCtrl($scope, serviceApi) {
         {
           id: 0,
           destinationfirstname: $scope.model.destinationfirstname,
-          destinationlastname: $scope.model.destinationlastname
-        })
-    })
+          destinationlastname: $scope.model.destinationlastname,
+          destinationstreetname: $scope.model.destinationstreetname,
+          destinationstreetnumber: $scope.model.destinationstreetnumber,
+          destinationcity: $scope.model.destinationcity,
+          destinationzipcode: $scope.model.destinationzipcode
+        });
+    });
   }
 
   function save() {
     useBackend(selectedId, function () {
-      console.log($scope.model.destinationfirstname);
       return serviceApi.put("brief",
         {
           id: selectedId,
           destinationfirstname: $scope.model.destinationfirstname,
-          destinationlastname: $scope.model.destinationlastname
-        })
-    })
+          destinationlastname: $scope.model.destinationlastname,
+          destinationstreetname: $scope.model.destinationstreetname,
+          destinationstreetnumber: $scope.model.destinationstreetnumber,
+          destinationcity: $scope.model.destinationcity,
+          destinationzipcode: $scope.model.destinationzipcode
+        });
+    });
   }
 
   function remove(id) {

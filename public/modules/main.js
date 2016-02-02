@@ -4,6 +4,7 @@ angular.module('main', ['ngRoute', 'core', 'maintenance', 'locations', 'brieven'
   .controller('adminCtrl', AdminCtrl)
   .controller('mainCtrl', MainCtrl)
   .controller('loginCtrl', LoginCtrl)
+  .controller('registerCtrl', RegisterCtrl)
   .config(function ($routeProvider) {
     $routeProvider.when('/locations', {
       templateUrl: 'views/locations.html',
@@ -25,9 +26,13 @@ angular.module('main', ['ngRoute', 'core', 'maintenance', 'locations', 'brieven'
       templateUrl: 'views/login.html',
       controller: 'loginCtrl'
     });
+    $routeProvider.when('/register', {
+      templateUrl: 'views/register.html',
+      controller: 'registerCtrl'
+    });
     $routeProvider.otherwise({
-      templateUrl: 'views/main.html',
-      controller: 'mainCtrl'
+      templateUrl: 'views/login.html',
+      controller: 'loginCtrl'
     });
   })
   .config(function ($httpProvider){
@@ -83,11 +88,10 @@ function MyHttpInterceptor($q, $location){
 
 function LoginCtrl($scope, authService, $cookies, $location, $log){
   $scope.credentials={
-    username: '',
+    email: '',
     password: ''
   };
   $scope.login = function(credentials){
-    console.log("LOGIN");
     authService.login(credentials).then(
       function(res){
         $cookies.loggedInUser = res.data;
@@ -95,9 +99,39 @@ function LoginCtrl($scope, authService, $cookies, $location, $log){
       },
       function(err){
         //flashMessageService.setMessage(err.data);
-        console.log('ERROR');
         $log.log(err);
       });
   };
 }
 
+function RegisterCtrl($scope, authService, $cookies, $location, $log, serviceApi){
+  $scope.register = function(data){
+    serviceApi.post("add-user",
+    {
+      company: data.company,
+      vat_number: data.vat_number,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      email: data.email,
+      password: data.password,
+      streetname: data.streetname,
+      streetnumber: data.streetnumber,
+      zipcode: data.zipcode,
+      city: data.city
+    }).then(
+    function(res){
+      authService.login(data).then(
+      function(res){
+        $cookies.loggedInUser = res.data;
+        $location.path('/locations');
+      },
+      function(err){
+        $log.log(err);
+      });
+    },
+    function(err){
+      console.log('error!');
+    }
+    );
+  };
+}

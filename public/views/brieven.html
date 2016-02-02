@@ -23,20 +23,50 @@
     <div class="row"
          ng-show="isInAddMode()"
          style="margin-bottom: 12px;">
-      <div class="col-sm-4">
+      <div class="col-sm-12 text-space">
+        <input autofocus class="form-control input-lg" type="email"
+               placeholder="destination email"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationemail" />
+      </div>
+      <div class="col-sm-6 text-space">
         <input class="form-control input-lg" type="text"
                placeholder="destination firstname"
                ng-disabled="isBusy(-1)"
                ng-model="model.destinationfirstname" />
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-6 text-space">
         <input class="form-control input-lg" type="text"
                placeholder="destination lastname"
                ng-disabled="isBusy(-1)"
                ng-model="model.destinationlastname" />
       </div>
-      <div class="col-sm-4 button-space">
-        <div class="pull-right">
+      <div class="col-sm-9 text-space">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination streetname"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationstreetname" />
+      </div>
+      <div class="col-sm-3 text-space">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination streetnumber"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationstreetnumber" />
+      </div>
+      <div class="col-sm-9 text-space">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination city"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationcity" />
+      </div>
+      <div class="col-sm-3 text-space">
+        <input class="form-control input-lg" type="text"
+               placeholder="destination zipcode"
+               ng-disabled="isBusy(-1)"
+               ng-model="model.destinationzipcode" />
+      </div>
+      <div class="col-sm-2 button-space">
+        <div class="pull-left">
           <img ng-show="isBusy(-1)" src="images/progressring.gif" />
           <button class="btn btn-success btn-sm"
                   ng-disabled="isBusy()"
@@ -50,6 +80,7 @@
           </button>
         </div>
       </div>
+      <div class="col-sm-10 text-space"/>
     </div>
     
     <!-- EDIT Pane -->

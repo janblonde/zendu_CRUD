@@ -64,7 +64,7 @@ router.delete('/location/:id', sessionCheck, function(req,res){
 
 //BRIEVEN
 router.get('/brief', sessionCheck, function(req,res){
-    Brief.find(function(err, data){
+    Brief.find({_user:req.session.userid},function(err, data){
         if(!err){
             res.send(data);
         }else{
@@ -75,8 +75,13 @@ router.get('/brief', sessionCheck, function(req,res){
 
 router.post('/brief', sessionCheck, function(req,res){
     var brief = new Brief({
+        _user: req.session.userid,
         destinationLastName: req.body.destinationlastname,
         destinationFirstName: req.body.destinationfirstname,
+        destinationStreetName: req.body.destinationstreetname,
+        destinationStreetNumber: req.body.destinationstreetnumber,
+        destinationCity: req.body.destinationcity,
+        destinationZipCode: req.body.destinationZipCode,
         createdAt: new Date(Date.now())
     });
     
@@ -122,8 +127,10 @@ router.post('/add-user', function(req,res){
     hash = bcrypt.hashSync(password,salt);
     
     var user = new User({
-        email: req.body.username,
-        password: hash
+        email: req.body.email,
+        password: hash,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name
     });
     
     user.save(function(err){
@@ -136,7 +143,7 @@ router.post('/add-user', function(req,res){
 });
 
 router.post('/login', function(req,res){
-    var email = req.body.username;
+    var email = req.body.email;
     var password = req.body.password;
     
     User.findOne({
@@ -148,6 +155,7 @@ router.post('/login', function(req,res){
             if(bcrypt.compareSync(password, data.password)){
                 req.session.regenerate(function(){
                     req.session.user = email;
+                    req.session.userid = data._id;
                     res.send(email);
                 });
             }else{

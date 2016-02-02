@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.ObjectId;
 
 var Brief = new Schema({
-    _user : { type: Number, ref: 'User' },
+    _user : { type: ObjectId, ref: 'User' },
     destinationCompany: String,
     destinationLastName: String,
     destinationFirstName: String,
