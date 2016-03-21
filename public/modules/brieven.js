@@ -103,19 +103,6 @@ function BrievenCtrl($scope, serviceApi, Upload,$timeout) {
       url: 'http://54.93.88.196:3000/api/upload',
       data: {file: $scope.file}
     });
-
-/*    file.upload.then(function (response) {
-      $timeout(function () {
-        file.result = response.data;
-      });
-    }, function (response) {
-      if (response.status > 0)
-        $scope.errorMsg = response.status + ': ' + response.data;
-    }, function (evt) {
-      // Math.min is to fix IE which reports 200% sometimes
-      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-    });
-*/    
     
     useBackend(-1, function () {
       return serviceApi.post("brief",
