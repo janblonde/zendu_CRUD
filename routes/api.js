@@ -5,13 +5,43 @@ var Location = require('../models/location.js');
 var User = require('../models/user.js');
 var Brief = require('../models/brief.js');
 var bcrypt = require('bcrypt-nodejs');
+var multer = require('multer');
+
+//var multipart = require('connect-multiparty');
+//var multipartMiddleware = multipart();
+var storage = multer.diskStorage({ //multers disk storage settings
+    destination: function (req, file, cb) {
+        cb(null, './uploads/')
+    },
+    filename: function (req, file, cb) {
+        var datetimestamp = Date.now();
+        cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
+    }
+});
+
+var upload = multer({ //multer settings
+    storage: storage
+}).single('file');
+
+/** API path that will upload the files */
+router.post('/upload', function(req, res) {
+    console.log('BACKEND');
+    upload(req,res,function(err){
+        if(err){
+             console.log('ERROR');
+             res.json({error_code:1,err_desc:err});
+             return;
+        }
+        res.json({error_code:0,err_desc:null});
+    });
+});
 
 router.get('/',function(req,res){
     res.send('Welcome to the API zone');
 });
 
 //LOCATION
-router.get('/location', sessionCheck, function(req,res){
+router.get('/location', function(req,res){
     Location.find(function(err, locations){
         if(!err){
             res.send(locations);
@@ -119,6 +149,21 @@ router.delete('/brief/:id', sessionCheck, function(req,res){
     res.send("Brief id:" + req.params.id + " has been deleted");
 });
 
+//file upload
+
+/*router.post('/upload', function(req,res){
+    console.log(req.body);
+    console.log(req.body.file); 
+});*/
+
+/*router.post('/upload', multipartMiddleware, function(req, resp) {
+  console.log("BACKEND");
+  console.log(req.body);
+  console.log(req.files);
+  // don't forget to delete all req.files when done
+});*/
+
+
 //admin routes
 
 router.post('/add-user', function(req,res){
@@ -126,6 +171,12 @@ router.post('/add-user', function(req,res){
     password = req.body.password;
     salt = bcrypt.genSaltSync(10);
     hash = bcrypt.hashSync(password,salt);
+    
+    console.log(req);
+    console.log(req.body);
+    
+    console.log(req.body.password);
+    console.log(req.body.email);
     
     var user = new User({
         email: req.body.email,

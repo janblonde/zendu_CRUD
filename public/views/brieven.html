@@ -23,6 +23,17 @@
     <div class="row"
          ng-show="isInAddMode()"
          style="margin-bottom: 12px;">
+      <div class="col-sm-12">
+        <span class="btn btn-default btn-file">
+        Select<input type="file" title="select" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
+    ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" 
+    ngf-resize="{width: 100, height: 100}">
+    </span>
+        
+        <!--<input type="file" ngf-select ng-model="myfile" name="file"    
+               accept="image/*" ngf-max-size="2MB" required
+               ngf-model-invalid="errorFiles">-->
+      </div>
       <div class="col-sm-12 text-space">
         <input autofocus class="form-control input-lg" type="email"
                placeholder="destination email"
@@ -70,7 +81,7 @@
           <img ng-show="isBusy(-1)" src="images/progressring.gif" />
           <button class="btn btn-success btn-sm"
                   ng-disabled="isBusy()"
-                  ng-click="add()">
+                  ng-click="add(myfile)">
             Add
           </button>
           <button class="btn btn-danger btn-sm"
